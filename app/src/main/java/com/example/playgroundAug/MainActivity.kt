@@ -1,6 +1,5 @@
 package com.example.playgroundAug
 
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -9,7 +8,6 @@ import android.widget.LinearLayout
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.SwitchCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import com.example.playgroundAug.databinding.ActivityMainBinding
@@ -38,11 +36,14 @@ class MainActivity : AppCompatActivity() {
         when (actions) {
             DemoContract.Actions.EnableDemoMode -> sendBroadcast(DemoMode.enterDemoIntent)
             DemoContract.Actions.DisableDemoMode -> sendBroadcast(DemoMode.exitDemoIntent)
+
+            DemoContract.Actions.ShowNetworkIcon -> sendBroadcast(DemoMode.showNetworkIcon)
+            DemoContract.Actions.HideNetworkIcon -> sendBroadcast(DemoMode.hideNetworkIcon)
+
             DemoContract.Actions.ShowClockDialog -> clockDialog()
 
-            is DemoContract.Actions.SetClock -> DemoMode.clockIntent(actions.time).let {
-                this@MainActivity.sendBroadcast(it)
-            }
+            is DemoContract.Actions.SetClock -> sendBroadcast(DemoMode.clockIntent(actions.time))
+
         }
     }
 

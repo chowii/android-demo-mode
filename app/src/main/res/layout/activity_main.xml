@@ -49,6 +49,12 @@
                     android:paddingVertical="16dp"
                     android:text="Clock (As 24H e.g. 1730)" />
 
+                <androidx.appcompat.widget.SwitchCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Show Network Icon"
+                    android:onCheckedChanged="@{ (view, isChecked) -> viewModel.setNetworkIconVisibility(isChecked) }" />
+
             </LinearLayout>
         </ScrollView>
 

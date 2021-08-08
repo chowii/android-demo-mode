@@ -13,11 +13,12 @@ object DemoMode {
     internal val enterDemoIntent: Intent = getCommandIntent(ENTER_DEMO_COMMAND_STRING)
     internal val exitDemoIntent: Intent = getCommandIntent(EXIT_DEMO_COMMAND_STRING)
 
+    internal val showNetworkIcon: Intent = NetworkDemo.showNetwork()
+    internal val hideNetworkIcon: Intent = NetworkDemo.hideNetwork()
+
     internal fun clockIntent(time: String) = demoIntent
             .putExtra("command", "clock")
             .putExtra(TIME_EXTRA_KEY, time)
-
-
 
     internal fun getCommandIntent(command: String, vararg extras: Pair<String, Any>): Intent {
         return demoIntent.apply {

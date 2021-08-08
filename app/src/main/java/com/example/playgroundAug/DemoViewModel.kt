@@ -24,6 +24,14 @@ class DemoViewModel: ViewModel() {
         }
     }
 
+    fun setNetworkIconVisibility(isVisible: Boolean) {
+        if (isVisible) {
+            mutableActionsFlow.tryEmit(DemoContract.Actions.ShowNetworkIcon)
+        } else {
+            mutableActionsFlow.tryEmit(DemoContract.Actions.HideNetworkIcon)
+        }
+    }
+
     fun showClockDialog() {
         mutableActionsFlow.tryEmit(DemoContract.Actions.ShowClockDialog)
     }
