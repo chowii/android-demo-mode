@@ -11,7 +11,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        findViewById<SwitchCompat>(R.id.button).apply {
+        findViewById<SwitchCompat>(R.id.demo_mode_switch).apply {
             setOnCheckedChangeListener { buttonView, isChecked ->
                 Log.d("LOG_TAG---", "MainActivity#onCreate-13: $isChecked")
                 broadcastDemoMode(isChecked)
