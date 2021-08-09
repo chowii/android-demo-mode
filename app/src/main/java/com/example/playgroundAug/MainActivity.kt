@@ -3,8 +3,8 @@ package com.example.playgroundAug
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.widget.EditText
 import android.widget.LinearLayout
+import android.widget.TimePicker
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -48,17 +48,18 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun clockDialog() {
-        val input = EditText(this).apply {
+        val timePicker = TimePicker(this).apply {
             layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
             )
+            setOnTimeChangedListener { _, hourOfDay, minute ->
+                viewModel.setClock("$hourOfDay$minute")
+            }
         }
         AlertDialog.Builder(this)
-            .setTitle("Clock (As 24H e.g. 1730)")
-            .setView(input)
+            .setView(timePicker)
             .setPositiveButton("Set") { _, _ ->
-                viewModel.setClock(input.text.toString())
             }
             .setNegativeButton("Cancel", null)
             .show()

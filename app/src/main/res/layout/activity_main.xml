@@ -47,7 +47,8 @@
                     android:layout_height="wrap_content"
                     android:onClick="@{ (view) -> viewModel.showClockDialog()}"
                     android:paddingVertical="16dp"
-                    android:text="Clock (As 24H e.g. 1730)" />
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                    android:text="Clock" />
 
                 <androidx.appcompat.widget.SwitchCompat
                     android:layout_width="match_parent"
