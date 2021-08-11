@@ -42,6 +42,7 @@ class MainActivity : AppCompatActivity() {
 
             DemoContract.Actions.ShowClockDialog -> clockDialog()
 
+            is DemoContract.Actions.ToggleNotification -> sendBroadcast(DemoMode.toggleNotificationVisibility(actions.isVisible))
             is DemoContract.Actions.SetClock -> sendBroadcast(DemoMode.clockIntent(actions.time))
 
         }

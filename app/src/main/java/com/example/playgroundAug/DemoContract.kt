@@ -10,6 +10,7 @@ interface DemoContract {
 
         object ShowClockDialog: Actions()
 
+        data class ToggleNotification(val isVisible: Boolean) : Actions()
         data class SetClock(val time: String): Actions()
     }
 }

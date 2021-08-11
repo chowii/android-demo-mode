@@ -42,4 +42,8 @@ class DemoViewModel: ViewModel() {
         }
     }
 
+    fun setToggleNotification(isVisible: Boolean) {
+        mutableActionsFlow.tryEmit(DemoContract.Actions.ToggleNotification(isVisible))
+    }
+
 }

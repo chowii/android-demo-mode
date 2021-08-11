@@ -5,6 +5,7 @@ import android.content.Intent
 object DemoMode {
     private const val ENTER_DEMO_COMMAND_STRING = "enter"
     private const val EXIT_DEMO_COMMAND_STRING = "exit"
+    private const val NOTIFICATION_DEMO_COMMAND_STRING = "notifications"
     private const val TIME_EXTRA_KEY = "hhmm"
 
     private val demoIntent: Intent
@@ -15,6 +16,11 @@ object DemoMode {
 
     internal val showNetworkIcon: Intent = NetworkDemo.showNetwork()
     internal val hideNetworkIcon: Intent = NetworkDemo.hideNetwork()
+
+    internal fun toggleNotificationVisibility(isVisible: Boolean): Intent {
+        val visibilityExtra = "visible" to isVisible.toString()
+        return getCommandIntent(NOTIFICATION_DEMO_COMMAND_STRING, visibilityExtra)
+    }
 
     internal fun clockIntent(time: String) = demoIntent
             .putExtra("command", "clock")
