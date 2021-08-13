@@ -1,4 +1,4 @@
-package com.example.playgroundAug
+package com.example.demomodetile
 
 import android.content.Intent
 
@@ -16,6 +16,15 @@ object DemoMode {
 
     internal val showNetworkIcon: Intent = NetworkDemo.showNetwork()
     internal val hideNetworkIcon: Intent = NetworkDemo.hideNetwork()
+
+    private var demoPreferences: DemoPreferences? = null
+
+    internal fun getDemoPreferences(): DemoPreferences {
+        if (demoPreferences == null) {
+            demoPreferences = DemoPreferences()
+        }
+        return demoPreferences!!
+    }
 
     internal fun toggleNotificationVisibility(isVisible: Boolean): Intent {
         val visibilityExtra = "visible" to isVisible.toString()

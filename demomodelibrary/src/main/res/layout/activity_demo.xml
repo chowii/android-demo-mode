@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".DemoActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.example.demomodetile.com.example.playgroundAug.MainActivity">
+
+        <ScrollView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:divider="@color/black"
+                android:orientation="vertical"
+                android:paddingHorizontal="16dp">
+
+                <TextView
+                    android:id="@+id/clock_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{ (view) -> viewModel.showClockDialog()}"
+                    android:paddingVertical="16dp"
+                    android:text="Clock"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/demo_mode_switch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:checked="@{ viewState.isEnabled }"
+                    android:onCheckedChanged="@{ (view, isChecked) -> viewModel.setDemoMode(isChecked) }"
+                    android:text="Demo Mode"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:checked="@{ viewState.isNetworkVisible }"
+                    android:onCheckedChanged="@{ (view, isChecked) -> viewModel.setNetworkIconVisibility(isChecked) }"
+                    android:text="Show Network Icon" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:checked="@{ viewState.isNotificationVisible }"
+                    android:onCheckedChanged="@{ (view, isChecked) -> viewModel.setToggleNotification(isChecked) }"
+                    android:text="Show Notifications" />
+
+            </LinearLayout>
+        </ScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.example.demomodetile.DemoViewModel" />
+
+        <variable
+            name="viewState"
+            type="com.example.demomodetile.DemoContract" />
+
+    </data>
+</layout>
+

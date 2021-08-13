@@ -5,9 +5,6 @@
 
     <data>
 
-        <variable
-            name="viewModel"
-            type="com.example.playgroundAug.DemoViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -15,56 +12,20 @@
         android:layout_height="match_parent"
         tools:context=".MainActivity">
 
-        <ScrollView
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" >
 
-            <LinearLayout
+            <Button
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:divider="@color/black"
-                android:orientation="vertical"
-                android:paddingHorizontal="16dp">
+                android:layout_height="match_parent"
+                android:text="Demo Mode" />
 
-                <androidx.appcompat.widget.SwitchCompat
-                    android:id="@+id/demo_mode_switch"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:onCheckedChanged="@{ (view, isChecked) -> viewModel.setDemoMode(isChecked) }"
-                    android:text="Demo Mode"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/clock_edit_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:onClick="@{ (view) -> viewModel.showClockDialog()}"
-                    android:paddingVertical="16dp"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-                    android:text="Clock" />
-
-                <androidx.appcompat.widget.SwitchCompat
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Show Network Icon"
-                    android:onCheckedChanged="@{ (view, isChecked) -> viewModel.setNetworkIconVisibility(isChecked) }" />
-
-                <androidx.appcompat.widget.SwitchCompat
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:checked="true"
-                    android:text="Show Notifications"
-                    android:onCheckedChanged="@{ (view, isChecked) -> viewModel.setToggleNotification(isChecked) }" />
-
-            </LinearLayout>
-        </ScrollView>
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
