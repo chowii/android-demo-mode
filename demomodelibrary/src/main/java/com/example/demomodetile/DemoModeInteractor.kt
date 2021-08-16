@@ -13,8 +13,8 @@ class DemoModeInteractor(
     private var hasSentCommands = false
 
     suspend fun isDemoModeEnabled(context: Context): Boolean {
-        return demoPreferences.isDemoModeEnabled(context).first().also {
-            if (requireNotNull(it)) commandList.add(DemoMode.enterDemoIntent)
+        return demoPreferences.isDemoModeEnabled(context).first()?.also {
+            if (it) commandList.add(DemoMode.enterDemoIntent)
         } ?: false
     }
 
@@ -31,14 +31,14 @@ class DemoModeInteractor(
 
     suspend fun isNotificationsEnabled(context: Context): Boolean =
         demoPreferences.isNotificationVisible(context).first()
-            .also {
-                if (requireNotNull(it)) commandList.add(DemoMode.toggleNotificationVisibility(it))
+            ?.also {
+                if (it) commandList.add(DemoMode.toggleNotificationVisibility(it))
             } ?: false
 
     suspend fun isNetworkEnabled(context: Context): Boolean =
         demoPreferences.isNetworkDemoEnabled(context).first()
-            .also {
-                if (requireNotNull(it)) commandList.add(DemoMode.showNetworkIcon)
+            ?.also {
+                if (it) commandList.add(DemoMode.showNetworkIcon)
                 else commandList.add(DemoMode.hideNetworkIcon)
             } ?: false
 

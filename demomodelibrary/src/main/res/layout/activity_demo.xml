@@ -6,8 +6,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context="com.example.demomodetile.com.example.playgroundAug.MainActivity">
+        android:layout_height="match_parent">
 
         <ScrollView
             android:layout_width="0dp"
@@ -20,7 +19,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:divider="@color/black"
                 android:orientation="vertical"
                 android:paddingHorizontal="16dp">
 
@@ -72,7 +70,7 @@
 
         <variable
             name="viewState"
-            type="com.example.demomodetile.DemoContract" />
+            type="com.example.demomodetile.DemoContract.ViewState" />
 
     </data>
 </layout>
