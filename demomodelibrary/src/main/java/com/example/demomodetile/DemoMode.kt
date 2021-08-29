@@ -19,12 +19,12 @@ object DemoMode {
 
     private var demoPreferences: DemoPreferences? = null
 
-    internal fun getDemoPreferences(): DemoPreferences {
-        if (demoPreferences == null) {
-            demoPreferences = DemoPreferences()
-        }
-        return demoPreferences!!
-    }
+//    internal fun getDemoPreferences(): DemoPreferences {
+//        if (demoPreferences == null) {
+//            demoPreferences = DemoPreferences()
+//        }
+//        return demoPreferences!!
+//    }
 
     internal fun toggleNotificationVisibility(isVisible: Boolean): Intent {
         val visibilityExtra = "visible" to isVisible.toString()

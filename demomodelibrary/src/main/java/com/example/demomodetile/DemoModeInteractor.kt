@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.first
 
 
 class DemoModeInteractor(
-    private val demoPreferences: DemoPreferences = DemoPreferences(),
+    private val demoPreferences: DemoPreferences,
 ) {
 
     private val commandList = mutableListOf<Intent>()
@@ -15,14 +15,18 @@ class DemoModeInteractor(
     suspend fun isDemoModeEnabled(context: Context): Boolean {
         return demoPreferences.isDemoModeEnabled(context).first()?.also {
             if (it) commandList.add(DemoMode.enterDemoIntent)
+            else commandList.add(DemoMode.exitDemoIntent)
         } ?: false
     }
 
-    fun setDemoModeEnabled(context: Context, isEnabled: Boolean) {
-        demoPreferences.setDemoMode(context, isEnabled)
+    suspend fun setDemoModeEnabled(isEnabled: Boolean) {
+        demoPreferences.setDemoMode(isEnabled)
     }
 
     suspend fun syncAndSend(context: Context) {
+        commandList.clear()
+        hasSentCommands = false
+        isDemoModeEnabled(context)
         isNotificationsEnabled(context)
         isNetworkEnabled(context)
         getClock(context)
@@ -32,7 +36,7 @@ class DemoModeInteractor(
     suspend fun isNotificationsEnabled(context: Context): Boolean =
         demoPreferences.isNotificationVisible(context).first()
             ?.also {
-                if (it) commandList.add(DemoMode.toggleNotificationVisibility(it))
+                commandList.add(DemoMode.toggleNotificationVisibility(it))
             } ?: false
 
     suspend fun isNetworkEnabled(context: Context): Boolean =
@@ -57,6 +61,18 @@ class DemoModeInteractor(
             }
             hasSentCommands = true
         }
+    }
+
+    fun setNetworkIconVisibility(isVisible: Boolean) {
+        demoPreferences.setNetworkIconVisibility(isVisible)
+    }
+
+    fun setNotificationIconVisibility(isVisible: Boolean) {
+        demoPreferences.setNetworkIconVisibility(isVisible)
+    }
+
+    fun setClock(time: String) {
+        demoPreferences.setClock(time)
     }
 }
 

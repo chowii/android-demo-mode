@@ -2,6 +2,7 @@ package com.example.demomodetile
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.LinearLayout
 import android.widget.TimePicker
 import androidx.activity.viewModels
@@ -18,19 +19,29 @@ import com.example.demomodetile.DemoContract.Actions.ShowNetworkIcon
 import com.example.demomodetile.DemoContract.Actions.ToggleNotification
 import com.example.demomodetile.DemoContract.ViewState
 import com.example.demomodetile.databinding.ActivityDemoBinding
+import com.example.demomodetile.di.ViewModelFactory
+import com.example.demomodetile.di.inject
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 class DemoActivity : AppCompatActivity() {
 
-    private val viewModel by viewModels<DemoViewModel>()
+    @Inject
+    lateinit var demoModeInteractor: DemoModeInteractor
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+
+    private val viewModel by viewModels<DemoViewModel> { viewModelFactory }
     private lateinit var contentView: ActivityDemoBinding
-    private val demoPreferences: DemoPreferences by lazy { DemoMode.getDemoPreferences() }
-    private val demoModeInteractor = DemoModeInteractor(demoPreferences)
+//    private val demoPreferences: DemoPreferences by lazy { DemoMode.getDemoPreferences() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        inject(this)
         contentView = DataBindingUtil.setContentView<ActivityDemoBinding>(this, R.layout.activity_demo)
             .apply {
                 viewModel = this@DemoActivity.viewModel
@@ -67,34 +78,18 @@ class DemoActivity : AppCompatActivity() {
     }
 
     private fun handleActions(actions: Actions) {
+        Log.d("LOG_TAG---", "DemoActivity#handleActions-80: $actions")
         when (actions) {
-            EnableDemoMode -> {
-                demoPreferences.setDemoMode(this, true)
-                sendBroadcast(DemoMode.enterDemoIntent)
-            }
-            DisableDemoMode -> {
-                demoPreferences.setDemoMode(this, false)
-                sendBroadcast(DemoMode.exitDemoIntent)
-            }
+            EnableDemoMode -> sendBroadcast(DemoMode.enterDemoIntent)
+            DisableDemoMode -> sendBroadcast(DemoMode.exitDemoIntent)
 
-            ShowNetworkIcon -> {
-                sendBroadcast(DemoMode.showNetworkIcon)
-            }
-            HideNetworkIcon -> {
-                sendBroadcast(DemoMode.hideNetworkIcon)
-                demoPreferences.setNetworkIconVisibility(this, false)
-            }
+            ShowNetworkIcon -> sendBroadcast(DemoMode.showNetworkIcon)
+            HideNetworkIcon -> sendBroadcast(DemoMode.hideNetworkIcon)
 
             ShowClockDialog -> clockDialog()
 
-            is ToggleNotification -> {
-                sendBroadcast(DemoMode.toggleNotificationVisibility(actions.isVisible))
-                demoPreferences.setNotificationIconVisibility(this, actions.isVisible)
-            }
-            is SetClock -> {
-                sendBroadcast(DemoMode.clockIntent(actions.time))
-                demoPreferences.setClock(this, actions.time)
-            }
+            is ToggleNotification -> sendBroadcast(DemoMode.toggleNotificationVisibility(actions.isVisible))
+            is SetClock -> sendBroadcast(DemoMode.clockIntent(actions.time))
 
         }
     }

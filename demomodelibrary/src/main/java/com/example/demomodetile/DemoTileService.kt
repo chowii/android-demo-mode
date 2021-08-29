@@ -4,27 +4,31 @@ import android.graphics.drawable.Icon
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
 import android.util.Log
+import com.example.demomodetile.di.inject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 class DemoTileService : TileService() {
 
-    private lateinit var demoPreferences: DemoModeInteractor
+    @Inject
+    lateinit var demoModeInteractor: DemoModeInteractor
+
     private val job = SupervisorJob()
     private val scope = CoroutineScope(Dispatchers.Main + job)
 
     override fun onCreate() {
         super.onCreate()
-        demoPreferences = DemoModeInteractor(DemoPreferences())
+        inject(this)
     }
 
     override fun onTileAdded() {
         super.onTileAdded()
         Log.d("LOG_TAG---", "DemoTileService#onTileAdded-12: ")
         scope.launch {
-            val isActive = demoPreferences.isDemoModeEnabled(this@DemoTileService)
+            val isActive = demoModeInteractor.isDemoModeEnabled(this@DemoTileService)
             if (isActive) {
                 qsTile.state = Tile.STATE_ACTIVE
             } else {
@@ -32,6 +36,7 @@ class DemoTileService : TileService() {
             }
             qsTile.updateTile()
         }
+
     }
 
     override fun onTileRemoved() {
@@ -42,8 +47,15 @@ class DemoTileService : TileService() {
     override fun onStartListening() {
         super.onStartListening()
         Log.d("LOG_TAG---", "DemoTileService#onStartListening-22: ")
-        qsTile.icon = Icon.createWithResource(this, R.drawable.ic_demo_mode)
-        qsTile.updateTile()
+        val context = this@DemoTileService
+        qsTile.icon = Icon.createWithResource(context, R.drawable.ic_demo_mode)
+        scope.launch {
+            val isActive = demoModeInteractor.isDemoModeEnabled(context)
+            val tileState = if (isActive) Tile.STATE_ACTIVE else Tile.STATE_INACTIVE
+            setQsTile(tileState, isActive)
+            demoModeInteractor.syncAndSend(context)
+            qsTile.updateTile()
+        }
     }
 
     override fun onStopListening() {
@@ -55,20 +67,22 @@ class DemoTileService : TileService() {
         super.onClick()
         scope.launch {
             val context = this@DemoTileService
-            val isActive = demoPreferences.isDemoModeEnabled(context)
+            val isActive = demoModeInteractor.isDemoModeEnabled(context)
             Log.d("LOG_TAG---", "DemoTileService#onClick-28: ${qsTile.state}")
-            if (isActive) {
-                setQsTile(Tile.STATE_INACTIVE, false)
-            } else {
-                setQsTile(Tile.STATE_ACTIVE, true)
-            }
-            demoPreferences.syncAndSend(context)
+            val tileState = if (!isActive) Tile.STATE_ACTIVE else Tile.STATE_INACTIVE
+            setQsTile(tileState, !isActive)
             qsTile.updateTile()
         }
     }
 
-    private fun setQsTile(state: Int, isEnabled: Boolean) {
+    override fun onDestroy() {
+        super.onDestroy()
+        job.cancel()
+    }
+
+    private suspend fun setQsTile(state: Int, isEnabled: Boolean) {
         qsTile.state = state
-        demoPreferences.setDemoModeEnabled(this, isEnabled)
+        demoModeInteractor.setDemoModeEnabled(isEnabled)
+        demoModeInteractor.syncAndSend(this)
     }
 }
