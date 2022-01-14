@@ -19,8 +19,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class DemoViewModel(
+class DemoViewModel @Inject constructor(
     application: Application,
     private val demoModeInteractor: DemoModeInteractor
 ): AndroidViewModel(application) {

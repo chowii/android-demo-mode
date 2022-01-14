@@ -24,6 +24,9 @@ class DemoModule(val context: Context) {
     fun provideDataStore(): DataStore<Preferences> = context.dataStore
 
     @Provides
+    fun providesApplication() = context.applicationContext as Application
+
+    @Provides
     @Singleton
     fun provideDemoModeInteractor(
         demoPreferences: DemoPreferences
@@ -32,18 +35,9 @@ class DemoModule(val context: Context) {
     )
 
     @Provides
-    @Singleton
-    fun provideDemoPreferences(dataStore: DataStore<Preferences>) = DemoPreferences(dataStore)
-
-    @Provides
     @IntoMap
     @ViewModelKey(DemoViewModel::class)
-    fun provideDemoModeViewModel(
-        demoModeInteractor: DemoModeInteractor
-    ): ViewModel = DemoViewModel(
-        context.applicationContext as Application,
-        demoModeInteractor
-    )
+    fun provideDemoModeViewModel(demoViewModel: DemoViewModel): ViewModel = demoViewModel
 
     @Provides
     fun provideViewModelFactory(

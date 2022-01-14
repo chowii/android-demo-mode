@@ -22,12 +22,10 @@ class DemoTileService : TileService() {
     override fun onCreate() {
         super.onCreate()
         inject(this)
-        Log.d("LOG_TAG---", "DemoTileService#onCreate-26: ")
     }
 
     override fun onTileAdded() {
         super.onTileAdded()
-        Log.d("LOG_TAG---", "DemoTileService#onTileAdded-12: ")
         scope.launch {
             withContext(Dispatchers.IO) {
                val isActive = demoModeInteractor.isDemoModeEnabled()
@@ -40,11 +38,6 @@ class DemoTileService : TileService() {
             qsTile.updateTile()
         }
 
-    }
-
-    override fun onTileRemoved() {
-        super.onTileRemoved()
-        Log.d("LOG_TAG---", "DemoTileService#onTileRemoved-17: ")
     }
 
     override fun onStartListening() {
@@ -68,13 +61,10 @@ class DemoTileService : TileService() {
     }
 
     override fun onClick() {
-        Log.d("LOG_TAG---", "DemoTileService#onClick-72: pre super")
         super.onClick()
-        Log.d("LOG_TAG---", "DemoTileService#onClick-74: post super")
         scope.launch {
             withContext(Dispatchers.IO) {
                 val isActive = demoModeInteractor.isDemoModeEnabled()
-                Log.d("LOG_TAG---", "DemoTileService#onClick-28: ${qsTile.state}")
                 val tileState = if (!isActive) Tile.STATE_ACTIVE else Tile.STATE_INACTIVE
                 setQsTile(tileState, !isActive)
             }

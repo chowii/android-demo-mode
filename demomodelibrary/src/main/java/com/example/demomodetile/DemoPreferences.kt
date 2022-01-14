@@ -12,8 +12,11 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class DemoPreferences(private val dataStore: DataStore<Preferences>) {
+class DemoPreferences @Inject constructor(
+    private val dataStore: DataStore<Preferences>
+) {
 
     private val job = SupervisorJob()
     private val scope = CoroutineScope(Dispatchers.IO + job)
