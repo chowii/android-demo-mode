@@ -33,30 +33,30 @@ class DemoPreferences(private val dataStore: DataStore<Preferences>) {
         }
     }
 
-    fun isNetworkDemoEnabled(): Flow<Boolean?> {
+    fun isNetworkIconHidden(): Flow<Boolean?> {
         return dataStore.data.map {
             it[NETWORK_DEMO_KEY]
         }
     }
 
-    fun setNetworkIconVisibility(isVisible: Boolean) {
+    fun setNetworkIconVisibility(isHidden: Boolean) {
         scope.launch {
             dataStore.edit {
-                it[NETWORK_DEMO_KEY] = isVisible
+                it[NETWORK_DEMO_KEY] = isHidden
             }
         }
     }
 
-    fun isNotificationVisible(): Flow<Boolean?> {
+    fun isNotificationHidden(): Flow<Boolean?> {
         return dataStore.data.map {
             it[NOTIFICATION_DEMO_KEY]
         }
     }
 
-    fun setNotificationIconVisibility(isVisible: Boolean) {
+    fun setNotificationIconVisibility(isHidden: Boolean) {
         scope.launch {
             dataStore.edit {
-                it[NOTIFICATION_DEMO_KEY] = isVisible
+                it[NOTIFICATION_DEMO_KEY] = isHidden
             }
         }
     }

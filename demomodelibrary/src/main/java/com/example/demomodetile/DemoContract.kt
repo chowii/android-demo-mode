@@ -5,8 +5,8 @@ interface DemoContract {
     data class ViewState(
         val isEnabled: Boolean,
         val clock: String?,
-        val isNetworkVisible: Boolean,
-        val isNotificationVisible: Boolean,
+        val isNetworkHidden: Boolean,
+        val isNotificationHidden: Boolean,
     )
 
     sealed class Actions {

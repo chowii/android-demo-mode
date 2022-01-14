@@ -22,14 +22,33 @@
                 android:orientation="vertical"
                 android:paddingHorizontal="16dp">
 
-                <TextView
-                    android:id="@+id/clock_edit_text"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:onClick="@{ (view) -> viewModel.showClockDialog()}"
-                    android:paddingVertical="16dp"
-                    android:text="Clock"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
+                    android:orientation="horizontal"
+                    android:onClick="@{ (view) -> viewModel.showClockDialog()}">
+
+                    <TextView
+                        android:id="@+id/clock_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:paddingVertical="16dp"
+                        android:text="Clock"
+                        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
+
+                    <TextView
+                        android:id="@+id/clock_value"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="end"
+                        android:paddingVertical="16dp"
+                        android:text="@{ viewState.clock }"
+                        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                        tools:text="100" />
+                </LinearLayout>
+
 
                 <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/demo_mode_switch"
@@ -46,16 +65,16 @@
                 <androidx.appcompat.widget.SwitchCompat
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:checked="@{ viewState.isNetworkVisible }"
-                    android:onCheckedChanged="@{ (view, isChecked) -> viewModel.setNetworkIconVisibility(isChecked) }"
-                    android:text="Show Network Icon" />
+                    android:checked="@{ !viewState.networkHidden }"
+                    android:onCheckedChanged="@{ (view, isChecked) -> viewModel.setNetworkIconVisibility(!isChecked) }"
+                    android:text="Hide Network Icon" />
 
                 <androidx.appcompat.widget.SwitchCompat
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:checked="@{ viewState.isNotificationVisible }"
-                    android:onCheckedChanged="@{ (view, isChecked) -> viewModel.setToggleNotification(isChecked) }"
-                    android:text="Show Notifications" />
+                    android:checked="@{ !viewState.notificationHidden }"
+                    android:onCheckedChanged="@{ (view, isChecked) -> viewModel.setToggleNotification(!isChecked) }"
+                    android:text="Hide Notifications" />
 
             </LinearLayout>
         </ScrollView>

@@ -2,7 +2,6 @@ package com.example.demomodetile
 
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import kotlinx.coroutines.flow.first
 
 
@@ -28,20 +27,20 @@ class DemoModeInteractor(
         commandList.clear()
         hasSentCommands = false
         isDemoModeEnabled()
-        isNotificationsEnabled()
-        isNetworkEnabled()
+        isNotificationsHidden()
+        isNetworkHidden()
         getClock()
         sendCommand(context)
     }
 
-    suspend fun isNotificationsEnabled(): Boolean =
-        demoPreferences.isNotificationVisible().first()
+    suspend fun isNotificationsHidden(): Boolean =
+        demoPreferences.isNotificationHidden().first()
             ?.also {
                 commandList.add(DemoMode.toggleNotificationVisibility(it))
             } ?: false
 
-    suspend fun isNetworkEnabled(): Boolean =
-        demoPreferences.isNetworkDemoEnabled().first()
+    suspend fun isNetworkHidden(): Boolean =
+        demoPreferences.isNetworkIconHidden().first()
             ?.also {
                 if (it) commandList.add(DemoMode.showNetworkIcon)
                 else commandList.add(DemoMode.hideNetworkIcon)

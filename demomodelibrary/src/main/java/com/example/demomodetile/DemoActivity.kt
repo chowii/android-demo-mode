@@ -64,13 +64,13 @@ class DemoActivity : AppCompatActivity() {
             val context = this@DemoActivity
             val isDemoModeEnabled = demoModeInteractor.isDemoModeEnabled()
             val clockTime = demoModeInteractor.getClock()
-            val isNetworkVisible = demoModeInteractor.isNetworkEnabled()
-            val isNotificationVisible = demoModeInteractor.isNotificationsEnabled()
+            val isNetworkHidden = demoModeInteractor.isNetworkHidden()
+            val isNotificationHidden = demoModeInteractor.isNotificationsHidden()
             contentView.viewState = ViewState(
                 isDemoModeEnabled,
                 clockTime,
-                isNetworkVisible = isNetworkVisible,
-                isNotificationVisible = isNotificationVisible
+                isNetworkHidden = isNetworkHidden,
+                isNotificationHidden = isNotificationHidden
             )
             demoModeInteractor.sendCommand(context)
         }
