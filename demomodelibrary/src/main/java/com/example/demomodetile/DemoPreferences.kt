@@ -18,7 +18,7 @@ class DemoPreferences(private val dataStore: DataStore<Preferences>) {
     private val job = SupervisorJob()
     private val scope = CoroutineScope(Dispatchers.IO + job)
 
-    fun isDemoModeEnabled(): Flow<Boolean?> {
+    internal fun isDemoModeEnabled(): Flow<Boolean?> {
         return dataStore.data.map {
             it[DEMO_MODE_KEY].also { bool ->
                 Log.d("LOG_TAG---", "DemoPreferences#isEnabled-26: $bool")
@@ -26,7 +26,7 @@ class DemoPreferences(private val dataStore: DataStore<Preferences>) {
         }
     }
 
-    fun setDemoMode(isEnabled: Boolean) {
+    internal fun setDemoMode(isEnabled: Boolean) {
         scope.launch {
             dataStore.edit { prefs ->
                 prefs[DEMO_MODE_KEY] = isEnabled
@@ -34,13 +34,13 @@ class DemoPreferences(private val dataStore: DataStore<Preferences>) {
         }
     }
 
-    fun isNetworkIconHidden(): Flow<Boolean?> {
+    internal fun isNetworkIconHidden(): Flow<Boolean?> {
         return dataStore.data.map {
             it[NETWORK_DEMO_KEY]
         }
     }
 
-    fun setNetworkIconVisibility(isHidden: Boolean) {
+    internal fun setNetworkIconVisibility(isHidden: Boolean) {
         scope.launch {
             dataStore.edit {
                 it[NETWORK_DEMO_KEY] = isHidden
@@ -48,13 +48,13 @@ class DemoPreferences(private val dataStore: DataStore<Preferences>) {
         }
     }
 
-    fun isNotificationHidden(): Flow<Boolean?> {
+    internal fun isNotificationHidden(): Flow<Boolean?> {
         return dataStore.data.map {
             it[NOTIFICATION_DEMO_KEY]
         }
     }
 
-    fun setNotificationIconVisibility(isHidden: Boolean) {
+    internal fun setNotificationIconVisibility(isHidden: Boolean) {
         scope.launch {
             dataStore.edit {
                 it[NOTIFICATION_DEMO_KEY] = isHidden
@@ -62,13 +62,13 @@ class DemoPreferences(private val dataStore: DataStore<Preferences>) {
         }
     }
 
-    fun getClockTime(): Flow<String?> {
+    internal fun getClockTime(): Flow<String?> {
         return dataStore.data.map {
             it[CLOCK_TIME_DEMO_KEY]
         }
     }
 
-    fun setClock(clockTime: String) {
+    internal fun setClock(clockTime: String) {
         scope.launch {
             dataStore.edit {
                 it[CLOCK_TIME_DEMO_KEY] = clockTime

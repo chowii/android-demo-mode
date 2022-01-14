@@ -85,8 +85,8 @@ class DemoViewModel(
 
     private fun initDemoState() {
         viewModelScope.launch {
-            val isDemoModeEnabled = demoModeInteractor.isDemoModeEnabled()
-            val clockTime = demoModeInteractor.getClock()
+            isDemoModeEnabled = demoModeInteractor.isDemoModeEnabled()
+            val clockTime = demoModeInteractor.getClock()?.also(::setClock)
             val isNetworkHidden = demoModeInteractor.isNetworkHidden()
             val isNotificationHidden = demoModeInteractor.isNotificationsHidden()
             mutableViewState.emitNewState(
@@ -105,7 +105,7 @@ class DemoViewModel(
         isEnabled: Boolean = mutableViewState.value?.isEnabled ?: false,
         clock: String = mutableViewState.value?.clock.orEmpty(),
         isNetworkHidden: Boolean = mutableViewState.value?.isNetworkHidden ?: false,
-        isNotificationHidden: Boolean = mutableViewState.value?.isNetworkHidden ?: false,
+        isNotificationHidden: Boolean = mutableViewState.value?.isNotificationHidden ?: false,
     ) {
         value = ViewState(
             isEnabled,
