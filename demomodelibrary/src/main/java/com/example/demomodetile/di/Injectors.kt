@@ -11,7 +11,6 @@ fun DemoActivity.inject(context: Context) {
 }
 
 fun DemoTileService.inject(context: Context) {
-    (this as Context)
     buildDemoComponent(context).inject(this)
 }
 

@@ -17,13 +17,11 @@ import com.example.demomodetile.DemoContract.Actions.SetClock
 import com.example.demomodetile.DemoContract.Actions.ShowClockDialog
 import com.example.demomodetile.DemoContract.Actions.ShowNetworkIcon
 import com.example.demomodetile.DemoContract.Actions.ToggleNotification
-import com.example.demomodetile.DemoContract.ViewState
 import com.example.demomodetile.databinding.ActivityDemoBinding
 import com.example.demomodetile.di.ViewModelFactory
 import com.example.demomodetile.di.inject
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class DemoActivity : AppCompatActivity() {
@@ -44,35 +42,13 @@ class DemoActivity : AppCompatActivity() {
         contentView = DataBindingUtil.setContentView<ActivityDemoBinding>(this, R.layout.activity_demo)
             .apply {
                 viewModel = this@DemoActivity.viewModel
+                lifecycleOwner = this@DemoActivity
             }
-
 
         lifecycleScope.launchWhenStarted {
             viewModel.actions
                 .onEach(::handleActions)
                 .collect()
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        updateDemoState()
-    }
-
-    private fun updateDemoState() {
-        lifecycleScope.launch {
-            val context = this@DemoActivity
-            val isDemoModeEnabled = demoModeInteractor.isDemoModeEnabled()
-            val clockTime = demoModeInteractor.getClock()
-            val isNetworkHidden = demoModeInteractor.isNetworkHidden()
-            val isNotificationHidden = demoModeInteractor.isNotificationsHidden()
-            contentView.viewState = ViewState(
-                isDemoModeEnabled,
-                clockTime,
-                isNetworkHidden = isNetworkHidden,
-                isNotificationHidden = isNotificationHidden
-            )
-            demoModeInteractor.sendCommand(context)
         }
     }
 
@@ -105,9 +81,9 @@ class DemoActivity : AppCompatActivity() {
         }
         AlertDialog.Builder(this)
             .setView(timePicker)
-            .setPositiveButton("Set") { _, _ ->
+            .setPositiveButton(R.string.time_picker_positive_button) { _, _ ->
             }
-            .setNegativeButton("Cancel", null)
+            .setNegativeButton(R.string.time_picker_negative_button, null)
             .show()
     }
 }

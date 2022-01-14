@@ -26,10 +26,11 @@ class DemoPreferences(private val dataStore: DataStore<Preferences>) {
         }
     }
 
-
-    suspend fun setDemoMode(isEnabled: Boolean) {
-        dataStore.edit { prefs ->
-            prefs[DEMO_MODE_KEY] = isEnabled
+    fun setDemoMode(isEnabled: Boolean) {
+        scope.launch {
+            dataStore.edit { prefs ->
+                prefs[DEMO_MODE_KEY] = isEnabled
+            }
         }
     }
 

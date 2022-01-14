@@ -1,7 +1,8 @@
 package com.example.demomodetile
 
-import android.util.Log
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.demomodetile.DemoContract.Actions
 import com.example.demomodetile.DemoContract.Actions.DisableDemoMode
@@ -11,14 +12,22 @@ import com.example.demomodetile.DemoContract.Actions.SetClock
 import com.example.demomodetile.DemoContract.Actions.ShowClockDialog
 import com.example.demomodetile.DemoContract.Actions.ShowNetworkIcon
 import com.example.demomodetile.DemoContract.Actions.ToggleNotification
+import com.example.demomodetile.DemoContract.ViewState
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class DemoViewModel(
+    application: Application,
     private val demoModeInteractor: DemoModeInteractor
-): ViewModel() {
+): AndroidViewModel(application) {
+
+    init {
+        initDemoState()
+    }
 
     private var isDemoModeEnabled = false
 
@@ -28,6 +37,9 @@ class DemoViewModel(
     )
     val actions: Flow<Actions> = mutableActionsFlow
 
+    private val mutableViewState = MutableLiveData<ViewState>()
+    val viewState = mutableViewState
+
     fun setDemoMode(isEnabled: Boolean) {
         isDemoModeEnabled = isEnabled
         if (isDemoModeEnabled) {
@@ -35,22 +47,23 @@ class DemoViewModel(
         } else {
             mutableActionsFlow.tryEmit(DisableDemoMode)
         }
-        viewModelScope.launch {
-            demoModeInteractor.setDemoModeEnabled(isEnabled)
-        }
+        demoModeInteractor.setDemoModeEnabled(isEnabled)
+        mutableViewState.emitNewState(isEnabled = isEnabled)
     }
 
-    fun setNetworkIconVisibility(isVisible: Boolean) {
+    fun setNetworkIconVisibility(isHidden: Boolean) {
         if (!isDemoModeEnabled) return
-        if (isVisible) {
+        if (isHidden) {
             mutableActionsFlow.tryEmit(ShowNetworkIcon)
         } else {
             mutableActionsFlow.tryEmit(HideNetworkIcon)
         }
-        demoModeInteractor.setNetworkIconVisibility(isVisible)
+        demoModeInteractor.setNetworkIconVisibility(isHidden)
+        mutableViewState.emitNewState(isNetworkHidden = isHidden)
     }
 
     fun showClockDialog() {
+        if (!isDemoModeEnabled) return
         mutableActionsFlow.tryEmit(ShowClockDialog)
     }
 
@@ -59,13 +72,46 @@ class DemoViewModel(
         if (isDemoModeEnabled) {
             mutableActionsFlow.tryEmit(SetClock(time))
             demoModeInteractor.setClock(time)
+            mutableViewState.emitNewState(clock = time)
         }
     }
 
-    fun setToggleNotification(isVisible: Boolean) {
+    fun setToggleNotification(isHidden: Boolean) {
         if (!isDemoModeEnabled) return
-        mutableActionsFlow.tryEmit(ToggleNotification(isVisible))
-        demoModeInteractor.setNotificationIconVisibility(isVisible)
+        mutableActionsFlow.tryEmit(ToggleNotification(isHidden))
+        demoModeInteractor.setNotificationIconVisibility(isHidden)
+        mutableViewState.emitNewState(isNotificationHidden = isHidden)
     }
 
+    private fun initDemoState() {
+        viewModelScope.launch {
+            val isDemoModeEnabled = demoModeInteractor.isDemoModeEnabled()
+            val clockTime = demoModeInteractor.getClock()
+            val isNetworkHidden = demoModeInteractor.isNetworkHidden()
+            val isNotificationHidden = demoModeInteractor.isNotificationsHidden()
+            mutableViewState.emitNewState(
+                isDemoModeEnabled,
+                clockTime.orEmpty(),
+                isNetworkHidden = isNetworkHidden,
+                isNotificationHidden = isNotificationHidden
+            )
+            withContext(Dispatchers.Main) {
+                demoModeInteractor.sendCommand(getApplication<Application>())
+            }
+        }
+    }
+
+    private fun MutableLiveData<ViewState>.emitNewState(
+        isEnabled: Boolean = mutableViewState.value?.isEnabled ?: false,
+        clock: String = mutableViewState.value?.clock.orEmpty(),
+        isNetworkHidden: Boolean = mutableViewState.value?.isNetworkHidden ?: false,
+        isNotificationHidden: Boolean = mutableViewState.value?.isNetworkHidden ?: false,
+    ) {
+        value = ViewState(
+            isEnabled,
+            clock,
+            isNetworkHidden,
+            isNotificationHidden,
+        )
+    }
 }

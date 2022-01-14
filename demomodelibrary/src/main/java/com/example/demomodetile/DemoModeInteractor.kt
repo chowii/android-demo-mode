@@ -19,7 +19,7 @@ class DemoModeInteractor(
         } ?: false
     }
 
-    suspend fun setDemoModeEnabled(isEnabled: Boolean) {
+    fun setDemoModeEnabled(isEnabled: Boolean) {
         demoPreferences.setDemoMode(isEnabled)
     }
 

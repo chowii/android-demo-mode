@@ -1,11 +1,10 @@
 package com.example.demomodetile.di
 
+import android.app.Application
 import android.content.Context
 import androidx.datastore.core.DataStore
-import androidx.datastore.dataStoreFile
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
-import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.lifecycle.ViewModel
 import com.example.demomodetile.DemoModeInteractor
 import com.example.demomodetile.DemoPreferences
@@ -22,9 +21,7 @@ class DemoModule(val context: Context) {
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "demo_prefs")
 
     @Provides
-    fun provideDataStore(): DataStore<Preferences> {
-        return context.dataStore
-    }
+    fun provideDataStore(): DataStore<Preferences> = context.dataStore
 
     @Provides
     @Singleton
@@ -44,6 +41,7 @@ class DemoModule(val context: Context) {
     fun provideDemoModeViewModel(
         demoModeInteractor: DemoModeInteractor
     ): ViewModel = DemoViewModel(
+        context.applicationContext as Application,
         demoModeInteractor
     )
 
