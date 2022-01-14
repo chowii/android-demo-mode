@@ -34,7 +34,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:paddingVertical="16dp"
-                        android:text="Clock"
+                        android:text="@string/clock"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
 
                     <TextView
@@ -56,7 +56,7 @@
                     android:layout_height="wrap_content"
                     android:checked="@{ viewState.isEnabled }"
                     android:onCheckedChanged="@{ (view, isChecked) -> viewModel.setDemoMode(isChecked) }"
-                    android:text="Demo Mode"
+                    android:text="@string/demo_mode"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
@@ -67,14 +67,14 @@
                     android:layout_height="wrap_content"
                     android:checked="@{ !viewState.networkHidden }"
                     android:onCheckedChanged="@{ (view, isChecked) -> viewModel.setNetworkIconVisibility(!isChecked) }"
-                    android:text="Hide Network Icon" />
+                    android:text="@string/hide_network_icon" />
 
                 <androidx.appcompat.widget.SwitchCompat
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:checked="@{ !viewState.notificationHidden }"
                     android:onCheckedChanged="@{ (view, isChecked) -> viewModel.setToggleNotification(!isChecked) }"
-                    android:text="Hide Notifications" />
+                    android:text="@string/hide_notifications" />
 
             </LinearLayout>
         </ScrollView>

@@ -1,3 +1,7 @@
 <resources>
     <string name="tile_name">DemoMode</string>
+    <string name="clock">Clock</string>
+    <string name="demo_mode">Demo Mode</string>
+    <string name="hide_network_icon">Hide Network Icon</string>
+    <string name="hide_notifications">Hide Notifications</string>
 </resources>
