@@ -36,7 +36,6 @@ class DemoActivity : AppCompatActivity() {
 
     private val viewModel by viewModels<DemoViewModel> { viewModelFactory }
     private lateinit var contentView: ActivityDemoBinding
-//    private val demoPreferences: DemoPreferences by lazy { DemoMode.getDemoPreferences() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,10 +62,10 @@ class DemoActivity : AppCompatActivity() {
     private fun updateDemoState() {
         lifecycleScope.launch {
             val context = this@DemoActivity
-            val isDemoModeEnabled = demoModeInteractor.isDemoModeEnabled(context)
-            val clockTime = demoModeInteractor.getClock(context)
-            val isNetworkVisible = demoModeInteractor.isNetworkEnabled(context)
-            val isNotificationVisible = demoModeInteractor.isNotificationsEnabled(context)
+            val isDemoModeEnabled = demoModeInteractor.isDemoModeEnabled()
+            val clockTime = demoModeInteractor.getClock()
+            val isNetworkVisible = demoModeInteractor.isNetworkEnabled()
+            val isNotificationVisible = demoModeInteractor.isNotificationsEnabled()
             contentView.viewState = ViewState(
                 isDemoModeEnabled,
                 clockTime,

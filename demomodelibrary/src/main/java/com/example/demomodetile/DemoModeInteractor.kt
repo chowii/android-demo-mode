@@ -2,6 +2,7 @@ package com.example.demomodetile
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import kotlinx.coroutines.flow.first
 
 
@@ -12,8 +13,8 @@ class DemoModeInteractor(
     private val commandList = mutableListOf<Intent>()
     private var hasSentCommands = false
 
-    suspend fun isDemoModeEnabled(context: Context): Boolean {
-        return demoPreferences.isDemoModeEnabled(context).first()?.also {
+    suspend fun isDemoModeEnabled(): Boolean {
+        return demoPreferences.isDemoModeEnabled().first()?.also {
             if (it) commandList.add(DemoMode.enterDemoIntent)
             else commandList.add(DemoMode.exitDemoIntent)
         } ?: false
@@ -26,28 +27,28 @@ class DemoModeInteractor(
     suspend fun syncAndSend(context: Context) {
         commandList.clear()
         hasSentCommands = false
-        isDemoModeEnabled(context)
-        isNotificationsEnabled(context)
-        isNetworkEnabled(context)
-        getClock(context)
+        isDemoModeEnabled()
+        isNotificationsEnabled()
+        isNetworkEnabled()
+        getClock()
         sendCommand(context)
     }
 
-    suspend fun isNotificationsEnabled(context: Context): Boolean =
-        demoPreferences.isNotificationVisible(context).first()
+    suspend fun isNotificationsEnabled(): Boolean =
+        demoPreferences.isNotificationVisible().first()
             ?.also {
                 commandList.add(DemoMode.toggleNotificationVisibility(it))
             } ?: false
 
-    suspend fun isNetworkEnabled(context: Context): Boolean =
-        demoPreferences.isNetworkDemoEnabled(context).first()
+    suspend fun isNetworkEnabled(): Boolean =
+        demoPreferences.isNetworkDemoEnabled().first()
             ?.also {
                 if (it) commandList.add(DemoMode.showNetworkIcon)
                 else commandList.add(DemoMode.hideNetworkIcon)
             } ?: false
 
-    suspend fun getClock(context: Context): String? =
-        demoPreferences.getClockTime(context).first()
+    suspend fun getClock(): String? =
+        demoPreferences.getClockTime().first()
             .also {
                 it?.let { clock ->
                     commandList.add(DemoMode.clockIntent(clock))
@@ -68,7 +69,7 @@ class DemoModeInteractor(
     }
 
     fun setNotificationIconVisibility(isVisible: Boolean) {
-        demoPreferences.setNetworkIconVisibility(isVisible)
+        demoPreferences.setNotificationIconVisibility(isVisible)
     }
 
     fun setClock(time: String) {
