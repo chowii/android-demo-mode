@@ -52,6 +52,11 @@ class DemoActivity : AppCompatActivity() {
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        viewModel.initDemoState()
+    }
+
     private fun handleActions(actions: Actions) {
         Log.d("LOG_TAG---", "DemoActivity#handleActions-80: $actions")
         when (actions) {

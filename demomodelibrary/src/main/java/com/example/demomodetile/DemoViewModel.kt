@@ -84,10 +84,10 @@ class DemoViewModel @Inject constructor(
         mutableViewState.emitNewState(isNotificationHidden = isHidden)
     }
 
-    private fun initDemoState() {
+    internal fun initDemoState() {
         viewModelScope.launch {
             isDemoModeEnabled = demoModeInteractor.isDemoModeEnabled()
-            val clockTime = demoModeInteractor.getClock()?.also(::setClock)
+            val clockTime = demoModeInteractor.getClock()?.also { setClock(it) }
             val isNetworkHidden = demoModeInteractor.isNetworkHidden()
             val isNotificationHidden = demoModeInteractor.isNotificationsHidden()
             mutableViewState.emitNewState(
