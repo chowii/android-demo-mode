@@ -1,11 +1,14 @@
 package com.example.demomodetile
 
+import android.content.Context
 import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.preferencesDataStore
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -14,10 +17,13 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+
 class DemoPreferences @Inject constructor(
-    private val dataStore: DataStore<Preferences>
+    @ApplicationContext context: Context,
 ) {
 
+    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "demo_prefs")
+    private val dataStore: DataStore<Preferences> = context.dataStore
     private val job = SupervisorJob()
     private val scope = CoroutineScope(Dispatchers.IO + job)
 

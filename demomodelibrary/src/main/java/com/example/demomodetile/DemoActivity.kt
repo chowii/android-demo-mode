@@ -18,27 +18,23 @@ import com.example.demomodetile.DemoContract.Actions.ShowClockDialog
 import com.example.demomodetile.DemoContract.Actions.ShowNetworkIcon
 import com.example.demomodetile.DemoContract.Actions.ToggleNotification
 import com.example.demomodetile.databinding.ActivityDemoBinding
-import com.example.demomodetile.di.ViewModelFactory
-import com.example.demomodetile.di.inject
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class DemoActivity : AppCompatActivity() {
 
     @Inject
     lateinit var demoModeInteractor: DemoModeInteractor
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelFactory
-
-    private val viewModel by viewModels<DemoViewModel> { viewModelFactory }
+    private val viewModel by viewModels<DemoViewModel>()
     private lateinit var contentView: ActivityDemoBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        inject(this)
         contentView = DataBindingUtil.setContentView<ActivityDemoBinding>(this, R.layout.activity_demo)
             .apply {
                 viewModel = this@DemoActivity.viewModel

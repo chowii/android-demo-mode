@@ -13,6 +13,7 @@ import com.example.demomodetile.DemoContract.Actions.ShowClockDialog
 import com.example.demomodetile.DemoContract.Actions.ShowNetworkIcon
 import com.example.demomodetile.DemoContract.Actions.ToggleNotification
 import com.example.demomodetile.DemoContract.ViewState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
@@ -21,6 +22,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
+@HiltViewModel
 class DemoViewModel @Inject constructor(
     application: Application,
     private val demoModeInteractor: DemoModeInteractor

@@ -3,9 +3,12 @@ package com.example.demomodetile
 import android.content.Context
 import android.content.Intent
 import kotlinx.coroutines.flow.first
+import javax.inject.Inject
+import javax.inject.Singleton
 
 
-class DemoModeInteractor(
+@Singleton
+class DemoModeInteractor @Inject constructor(
     private val demoPreferences: DemoPreferences,
 ) {
 
